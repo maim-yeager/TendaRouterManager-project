@@ -57,6 +57,22 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      # build.gradle.kts wires the debug build to a debug.keystore at the repo
+      # root (signingConfigs "debugConfig"), but that keystore is a local
+      # machine-generated file that was never part of the exported project, so
+      # Gradle's validateSigningDebug task fails without it. Generate a
+      # standard Android debug keystore here with the exact
+      # alias/password/keypass the build config expects.
+      - name: Generate debug keystore
+        run: |
+          keytool -genkeypair -v \
+            -keystore debug.keystore \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
 
