@@ -40,6 +40,20 @@ jobs:
           rm -f app/src/main/assets/index.html
           cp -r web/dist/* app/src/main/assets/
 
+      # This exported project shipped without the gradlew wrapper script/jar,
+      # so we download the exact Gradle version from gradle-wrapper.properties
+      # directly instead of relying on ./gradlew. This also regenerates a
+      # proper wrapper (gradlew, gradlew.bat, gradle-wrapper.jar) as a build
+      # artifact so future local builds have it too.
+      - name: Install Gradle 9.3.1
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-9.3.1-bin.zip -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /opt
+          echo "/opt/gradle-9.3.1/bin" >> "$GITHUB_PATH"
+
+      - name: Generate Gradle wrapper files
+        run: gradle wrapper --gradle-version 9.3.1 --distribution-type bin
+
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
