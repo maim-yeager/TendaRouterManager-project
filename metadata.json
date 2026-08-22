@@ -1,0 +1,6 @@
+{
+  "name": "Tenda Manager",
+  "description": "Production-ready Tenda router management Android application with live native network discovery, robust Tenda adapter protocols, and secure hardware storage. Built by NH MAIM.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
